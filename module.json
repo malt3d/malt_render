@@ -1,0 +1,25 @@
+{
+  "name": "malt_render",
+  "readable_name": "Malt.Render",
+
+  "version": "0.0.1",
+
+  "components": [
+    { "name" : "camera" },
+    { "name" : "material" },
+    { "name" : "mesh_renderer" },
+    { "name" : "render_test" },
+    "render_test", "directional_light", "point_light"
+  ],
+
+  "globals":
+  [
+    { "name" : "render_global" }
+  ],
+
+  "dependencies":
+  [
+    { "name" : "malt_core" },
+    { "name" : "malt_basic", "version": ".*?" }
+  ]
+}
