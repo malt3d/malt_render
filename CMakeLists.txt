@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(malt)
 
-LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/")
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../malt_cmake/")
 set(CMAKE_CXX_STANDARD 14)
 
 message(STATUS "${CMAKE_PREFIX_PATH}")
