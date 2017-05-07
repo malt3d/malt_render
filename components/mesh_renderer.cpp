@@ -12,7 +12,7 @@ void mesh_renderer::Handle(render, const render_ctx& ctx)
 {
     auto mat = get_entity().get_component<material>();
     auto& prog = mat->get_program();
-    prog.set_variable("model", get_component<malt::transform>()->get_mat4());
+    prog.set_variable("model", get_component<malt::transform>()->get_world_mat4());
     prog.set_variable("vp", ctx.vp);
     prog.set_variable("camera_position", ctx.cam_position);
     prog.set_variable("ambient_light", ctx.ambient_light);
