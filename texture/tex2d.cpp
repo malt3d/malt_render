@@ -11,8 +11,8 @@ namespace malt {
     {
     };
     namespace graphics {
-        texture2d::texture2d(gsl::span<const glm::vec3> data, int width, int height)
-                :texture2d(width, height)
+        texture2d::texture2d(gsl::span<const glm::vec3> data, rtk::resolution r)
+                :texture2d(r)
         {
             std::copy(data.begin(), data.end(), m_data.get());
         }
@@ -33,24 +33,29 @@ namespace malt {
             return y*m_width+x;
         }
 
-        texture2d::texture2d(int width, int height)
-        {
-            m_data = std::make_unique<glm::vec3[]>(width*height);
-            m_width = width;
-            m_height = height;
-            m_owns_data = true;
-        }
-
         gsl::span<const glm::vec3> texture2d::get_buffer() const
         {
             return { m_data.get(), m_width * m_height };
         }
 
-        texture2d::texture2d(std::unique_ptr<glm::vec3[]>&& data, int width, int height)
+        texture2d::texture2d(std::unique_ptr<glm::vec3[]>&& data, rtk::resolution r)
         {
             m_data = std::move(data);
-            m_width = width;
-            m_height = height;
+            m_width = r.width;
+            m_height = r.height;
+            m_owns_data = true;
+        }
+
+        rtk::resolution texture2d::get_resolution() const
+        {
+            return { rtk::pixels(m_width), rtk::pixels(m_height) };
+        }
+
+        texture2d::texture2d(rtk::resolution r)
+        {
+            m_width = r.width;
+            m_height = r.height;
+            m_data = std::make_unique<glm::vec3[]>(m_width*m_height);
             m_owns_data = true;
         }
 
@@ -63,7 +68,7 @@ namespace malt {
             {
                 vec3_data[i / 3] = glm::vec3(data[i], data[i + 1], data[i + 2]) / 255.f;
             }
-            auto res = texture2d(std::move(vec3_data), w, h);
+            auto res = texture2d(std::move(vec3_data), rtk::resolution(rtk::pixels(w), rtk::pixels(h)));
             SOIL_free_image_data(data);
             return res;
         }
@@ -78,7 +83,7 @@ namespace malt {
             glGenTextures(1, &m_texture_id);
             glBindTexture(GL_TEXTURE_2D, m_texture_id);
 
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, from.get_width(), from.get_height(), 0,
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, from.get_resolution().width, from.get_resolution().height, 0,
                     GL_RGB, GL_FLOAT, from.get_buffer().data());
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -96,6 +101,51 @@ namespace malt {
         {
             glActiveTexture(GL_TEXTURE0 + tex_id);
             glBindTexture(GL_TEXTURE_2D, m_texture_id);
+        }
+
+        texture2d create_texture(rtk::resolution r)
+        {
+            texture2d res;
+            res.m_width = r.width;
+            res.m_height = r.height;
+
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glGenTextures(1, &res.m_texture_id);
+
+            glBindTexture(GL_TEXTURE_2D, res.m_texture_id);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, r.width, r.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+            return res;
+        }
+
+        texture2d create_float_texture(rtk::resolution r)
+        {
+            texture2d res;
+            res.m_width = r.width;
+            res.m_height = r.height;
+
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glGenTextures(1, &res.m_texture_id);
+
+            glBindTexture(GL_TEXTURE_2D, res.m_texture_id);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, r.width, r.height, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+            return res;
+        }
+
+        rtk::resolution texture2d::get_resolution() const
+        {
+            return { rtk::pixels(m_width), rtk::pixels(m_height) };
         }
     }
 }

@@ -8,6 +8,7 @@
 #include <glm/vec3.hpp>
 #include <glad/glad.h>
 #include <gsl/span>
+#include <rtk/graphics/size.hpp>
 
 namespace malt {
     namespace graphics {
@@ -20,9 +21,9 @@ namespace malt {
 
             int index(int x, int y) const;
         public:
-            texture2d(int width, int height);
-            texture2d(gsl::span<const glm::vec3> data, int width, int height);
-            texture2d(std::unique_ptr<glm::vec3[]>&& data, int width, int height);
+            texture2d(rtk::resolution r);
+            texture2d(gsl::span<const glm::vec3> data, rtk::resolution r);
+            texture2d(std::unique_ptr<glm::vec3[]>&& data, rtk::resolution r);
 
             const glm::vec3& get_pixel(int x, int y) const;
 
@@ -32,8 +33,7 @@ namespace malt {
              */
             void set_pixel(int x, int y, const glm::vec3&);
 
-            int get_width() const { return m_width; }
-            int get_height() const { return m_height; }
+            rtk::resolution get_resolution() const;
 
             gsl::span<const glm::vec3> get_buffer() const;
         };
@@ -42,11 +42,21 @@ namespace malt {
     }
 
     namespace gl {
+
+        template <class elem_type, int channel_count>
+        struct texture_traits;
+
         class texture2d
         {
+            int m_width, m_height;
             GLuint m_texture_id;
             int wrap_mode;
             int filter_mode;
+
+            texture2d() = default;
+
+            friend texture2d create_texture(rtk::resolution);
+            friend texture2d create_float_texture(rtk::resolution);
 
         public:
             texture2d(const graphics::texture2d& from);
@@ -54,11 +64,16 @@ namespace malt {
 
             void activate(int tex_id) const;
 
+            rtk::resolution get_resolution() const;
+
             GLuint get_id()
             {
                 return m_texture_id;
             }
         };
+
+        texture2d create_texture(rtk::resolution);
+        texture2d create_float_texture(rtk::resolution);
     }
 }
 

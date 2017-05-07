@@ -11,6 +11,7 @@
 #include <malt_render/components/lights/point_light.hpp>
 #include <malt_render/components/lights/directional_light.hpp>
 #include <malt_render/display.hpp>
+#include <malt_basic/input.hpp>
 
 static render_mod* inst;
 
@@ -18,19 +19,14 @@ namespace malt
 {
 namespace input
 {
-    bool get_key(int keycode)
+    bool get_key_up(key_code code)
     {
-        return inst->w->get_key(keycode);
+        return inst->w->get_key_up(uint16_t(code));
     }
 
-    bool get_key_up(int keycode)
+    bool get_key_down(key_code code)
     {
-        return inst->w->get_key_up(keycode);
-    }
-
-    bool get_key_down(int keycode)
-    {
-        return inst->w->get_key_down(keycode);
+        return inst->w->get_key_down(uint16_t(code));
     }
 
     glm::vec2 get_cursor()
