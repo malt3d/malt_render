@@ -31,19 +31,22 @@ set(HEADER_FILES
         ${HEADER_PATH}/texture/tex2d.hpp
         ${HEADER_PATH}/module.hpp
         ${HEADER_PATH}/display.hpp
-        ${HEADER_PATH}/malt_render_fwd.hpp)
+        ${HEADER_PATH}/render_fwd.hpp
+        ${HEADER_PATH}/render_target.hpp
+        ${HEADER_PATH}/framebuffer.hpp)
 
 set(SOURCE_FILES
-        components/mesh_renderer.cpp
-        module.cpp
-        render_global.cpp
-        components/material.cpp
-        components/render_test.cpp
-        components/lights/directional_light.cpp
-        components/lights/point_light.cpp
-        components/camera.cpp
-        texture/tex2d.cpp
-        display.cpp)
+        src/components/mesh_renderer.cpp
+        src/module.cpp
+        src/render_global.cpp
+        src/components/material.cpp
+        src/components/render_test.cpp
+        src/components/lights/directional_light.cpp
+        src/components/lights/point_light.cpp
+        src/components/camera.cpp
+        src/texture/tex2d.cpp
+        src/display.cpp
+        src/framebuffer.cpp)
 
 add_library(malt_render SHARED ${SOURCE_FILES} ${HEADER_FILES})
 malt_def_module(malt_render)

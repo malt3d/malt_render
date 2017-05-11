@@ -12,6 +12,7 @@
 #include <malt_render/components/lights/directional_light.hpp>
 #include <malt_render/display.hpp>
 #include <malt_basic/input.hpp>
+#include <malt_render/framebuffer.hpp>
 
 static render_mod* inst;
 
@@ -92,6 +93,8 @@ void render_mod::update()
         cam->activate();
 
         malt::broadcast(render{}, ctx);
+
+        malt::gl::reset_framebuffer();
     });
     w->end_draw();
 }

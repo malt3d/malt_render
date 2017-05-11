@@ -8,6 +8,8 @@
 #include <malt_render/components/camera.hpp>
 #include <malt_render/display.hpp>
 #include <rtk/utility.hpp>
+#include <malt_render/framebuffer.hpp>
+#include <malt_render/texture/tex2d.hpp>
 
 void camera::Handle(malt::update)
 {
@@ -62,7 +64,7 @@ const glm::mat4 &camera::get_vp_matrix() const
     return m_vp_matrix;
 }
 
-void camera::reset_aspect()
+void camera::reset_aspect_ratio()
 {
     auto res = display->get_resolution();
     float aspect = float(res.width) / res.height;
@@ -71,15 +73,27 @@ void camera::reset_aspect()
 
 void camera::activate() const
 {
-    rtk::size<rtk::pixels> res{ rtk::pixels(display->get_resolution().width * viewport_size.x),
-                         rtk::pixels(display->get_resolution().height * viewport_size.y) };
+    auto reso = display->get_resolution();
+    if (m_fb)
+    {
+        reso = m_fb->get_texture()->get_resolution();
+        m_fb->activate();
+    }
+    else
+    {
+        rtk::set_viewport(rtk::get_rect(display->get_resolution(), m_viewport_pos, m_viewport_size));
+    }
+}
 
-    rtk::point2d<rtk::pixels> pos
-            { rtk::pixels(display->get_resolution().width * viewport_pos.x),
-              rtk::pixels(display->get_resolution().height * viewport_pos.y) };
+void camera::set_viewport(const glm::vec2& pos, const glm::vec2& sz)
+{
+    m_viewport_pos = pos;
+    m_viewport_size = sz;
+}
 
-    rtk::screen_rect r{pos, res};
-    rtk::set_viewport(r);
+void camera::render_to_texture(const malt::gl::framebuffer& fb)
+{
+    m_fb = &fb;
 }
 
 MALT_IMPLEMENT_COMP(camera)

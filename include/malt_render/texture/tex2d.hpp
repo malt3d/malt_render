@@ -12,12 +12,57 @@
 
 namespace malt {
     namespace graphics {
+        enum class channel_type : uint8_t
+        {
+            real,
+            integer
+        };
+
+        enum class pixel_format : uint8_t
+        {
+            gray_byte,
+            rgb_byte,
+            rgba_byte,
+
+            gray_half,
+            rgb_half,
+            rgba_half,
+
+            gray_float,
+            rgb_float,
+            rgba_float
+        };
+
+        template <channel_type c_type, int bits_per_channel, int channel_count> struct get_format;
+
+        template <> struct get_format<channel_type::real, 16, 1> { static constexpr auto value = pixel_format::gray_half; };
+        template <> struct get_format<channel_type::real, 16, 3> { static constexpr auto value = pixel_format::rgb_half; };
+        template <> struct get_format<channel_type::real, 16, 4> { static constexpr auto value = pixel_format::rgba_half; };
+
+        template <> struct get_format<channel_type::real, 32, 1> { static constexpr auto value = pixel_format::gray_float; };
+        template <> struct get_format<channel_type::real, 32, 3> { static constexpr auto value = pixel_format::rgb_float; };
+        template <> struct get_format<channel_type::real, 32, 4> { static constexpr auto value = pixel_format::rgba_float; };
+
+        template <> struct get_format<channel_type::integer, 8, 1> { static constexpr auto value = pixel_format::gray_byte; };
+        template <> struct get_format<channel_type::integer, 8, 3> { static constexpr auto value = pixel_format::rgb_byte; };
+        template <> struct get_format<channel_type::integer, 8, 4> { static constexpr auto value = pixel_format::rgba_byte; };
+
+        struct unsafe_texture
+        {
+            /*
+             * stores the raw texture data for this texture
+             */
+            void* m_data;
+
+            uint16_t m_width, m_height;
+            pixel_format m_fmt;
+        };
+
         class texture2d
+                : public unsafe_texture
         {
             bool m_owns_data;
             std::unique_ptr<glm::vec3[]> m_data;
-
-            int m_width, m_height;
 
             int index(int x, int y) const;
         public:
@@ -48,32 +93,28 @@ namespace malt {
 
         class texture2d
         {
-            int m_width, m_height;
+            uint16_t m_width, m_height;
             GLuint m_texture_id;
+
+            graphics::pixel_format m_fmt;
             int wrap_mode;
             int filter_mode;
 
             texture2d() = default;
 
-            friend texture2d create_texture(rtk::resolution);
-            friend texture2d create_float_texture(rtk::resolution);
+            friend texture2d create_texture(rtk::resolution, graphics::pixel_format);
+            friend class framebuffer;
 
         public:
-            texture2d(const graphics::texture2d& from);
+            texture2d(const graphics::unsafe_texture& tex);
             ~texture2d();
 
             void activate(int tex_id) const;
 
             rtk::resolution get_resolution() const;
-
-            GLuint get_id()
-            {
-                return m_texture_id;
-            }
         };
 
-        texture2d create_texture(rtk::resolution);
-        texture2d create_float_texture(rtk::resolution);
+        texture2d create_texture(rtk::resolution, graphics::pixel_format);
     }
 }
 

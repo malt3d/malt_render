@@ -32,7 +32,6 @@ void render_test::Handle(malt::start)
     auto texture = malt::graphics::load_texture("/home/fatih/Desktop/bjarne.jpg");
     auto gl_texture = new malt::gl::texture2d(texture);
 
-
     gl_texture->activate(1);
     phong_material->get_program().set_variable("tex", 1);
 

@@ -43,6 +43,10 @@ namespace malt {
             m_data = std::move(data);
             m_width = r.width;
             m_height = r.height;
+
+            unsafe_texture::m_data = m_data.get();
+            m_fmt = pixel_format::rgb_float;
+
             m_owns_data = true;
         }
 
@@ -56,6 +60,10 @@ namespace malt {
             m_width = r.width;
             m_height = r.height;
             m_data = std::make_unique<glm::vec3[]>(m_width*m_height);
+
+            unsafe_texture::m_data = m_data.get();
+            m_fmt = pixel_format::rgb_float;
+
             m_owns_data = true;
         }
 
@@ -76,22 +84,6 @@ namespace malt {
 
     namespace gl
     {
-        texture2d::texture2d(const graphics::texture2d& from)
-        {
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-            glGenTextures(1, &m_texture_id);
-            glBindTexture(GL_TEXTURE_2D, m_texture_id);
-
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, from.get_resolution().width, from.get_resolution().height, 0,
-                    GL_RGB, GL_FLOAT, from.get_buffer().data());
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        }
-
         texture2d::~texture2d()
         {
             glDeleteTextures(1, &m_texture_id);
@@ -103,50 +95,82 @@ namespace malt {
             glBindTexture(GL_TEXTURE_2D, m_texture_id);
         }
 
-        texture2d create_texture(rtk::resolution r)
+        struct gl_type
         {
-            texture2d res;
-            res.m_width = r.width;
-            res.m_height = r.height;
+            GLenum internal;
+            GLenum format;
+            GLenum type;
+        };
 
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            glGenTextures(1, &res.m_texture_id);
-
-            glBindTexture(GL_TEXTURE_2D, res.m_texture_id);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, r.width, r.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-            return res;
-        }
-
-        texture2d create_float_texture(rtk::resolution r)
+        constexpr gl_type to_gl_type(graphics::pixel_format fmt)
         {
-            texture2d res;
-            res.m_width = r.width;
-            res.m_height = r.height;
+            using namespace graphics;
+            switch (fmt)
+            {
+            case pixel_format::gray_byte: return {GL_R8, GL_RED, GL_UNSIGNED_BYTE};
+            case pixel_format::rgb_byte: return {GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE};
+            case pixel_format::rgba_byte: return {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE};
 
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            glGenTextures(1, &res.m_texture_id);
+            case pixel_format::gray_half: return {GL_R8, GL_RED, GL_HALF_FLOAT};
+            case pixel_format::rgb_half: return {GL_RGB8, GL_RGB, GL_HALF_FLOAT};
+            case pixel_format::rgba_half: return {GL_RGBA8, GL_RGBA, GL_HALF_FLOAT};
 
-            glBindTexture(GL_TEXTURE_2D, res.m_texture_id);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, r.width, r.height, 0, GL_RGBA, GL_FLOAT, nullptr);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-            return res;
+            case pixel_format::gray_float: return {GL_R8, GL_RED, GL_FLOAT};
+            case pixel_format::rgb_float: return {GL_RGB8, GL_RGB, GL_FLOAT};
+            case pixel_format::rgba_float: return {GL_RGBA8, GL_RGBA, GL_FLOAT};
+            }
         }
 
         rtk::resolution texture2d::get_resolution() const
         {
             return { rtk::pixels(m_width), rtk::pixels(m_height) };
         }
+
+        texture2d::texture2d(const graphics::unsafe_texture& tex)
+        {
+            m_width = tex.m_width;
+            m_height = tex.m_height;
+            m_fmt = tex.m_fmt;
+
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+            glGenTextures(1, &m_texture_id);
+            glBindTexture(GL_TEXTURE_2D, m_texture_id);
+
+            auto gl_t = to_gl_type(m_fmt);
+
+            glTexImage2D(GL_TEXTURE_2D, 0, gl_t.internal, m_width, m_height, 0, gl_t.format, gl_t.type, tex.m_data);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        }
+
+        texture2d create_texture(rtk::resolution r, graphics::pixel_format fmt)
+        {
+            texture2d res;
+            res.m_width = r.width;
+            res.m_height = r.height;
+            res.m_fmt = fmt;
+
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+            glGenTextures(1, &res.m_texture_id);
+            glBindTexture(GL_TEXTURE_2D, res.m_texture_id);
+
+            auto gl_t = to_gl_type(fmt);
+
+            glTexImage2D(GL_TEXTURE_2D, 0, gl_t.internal, res.m_width, res.m_height, 0, gl_t.format, gl_t.type, nullptr);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+            return res;
+        }
+
     }
 }
 
