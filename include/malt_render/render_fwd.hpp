@@ -5,11 +5,5 @@
 namespace malt
 {
     class display;
-
-    namespace gl
-    {
-        class texture2d;
-        class framebuffer;
-    }
 }
 

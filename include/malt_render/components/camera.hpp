@@ -10,6 +10,7 @@
 #include <glm/detail/type_mat4x4.hpp>
 #include <glm/glm.hpp>
 #include <malt_render/render_fwd.hpp>
+#include <rtk/framebuffer.hpp>
 
 class camera : public malt::component
 {
@@ -27,7 +28,7 @@ private:
     glm::vec2 m_viewport_size = {1.f, 1.f};
 
     malt::display* display;
-    const malt::gl::framebuffer* m_fb;
+    const rtk::gl::framebuffer* m_fb;
 
 public:
     void Handle(malt::update);
@@ -49,7 +50,7 @@ public:
 
     void set_viewport(const glm::vec2& pos, const glm::vec2& sz);
 
-    void render_to_texture(const malt::gl::framebuffer& fb);
+    void render_to_texture(const rtk::gl::framebuffer& fb);
 
     void activate() const;
 };

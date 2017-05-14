@@ -12,7 +12,8 @@
 #include <malt_render/components/lights/directional_light.hpp>
 #include <malt_render/display.hpp>
 #include <malt_basic/input.hpp>
-#include <malt_render/framebuffer.hpp>
+#include <rtk/framebuffer.hpp>
+using namespace rtk;
 
 static render_mod* inst;
 
@@ -40,7 +41,7 @@ namespace input
 void render_mod::init()
 {
     using namespace rtk::literals;
-    w = new rtk::window({800_px, 600_px}, "malt");
+    w = new window({800_px, 600_px}, "malt");
     w->lock_cursor(true);
     inst = this;
 }
@@ -94,7 +95,7 @@ void render_mod::update()
 
         malt::broadcast(render{}, ctx);
 
-        malt::gl::reset_framebuffer();
+        gl::reset_framebuffer();
     });
     w->end_draw();
 }

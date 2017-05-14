@@ -28,12 +28,10 @@ set(HEADER_FILES
         ${HEADER_PATH}/components/camera.hpp
         ${HEADER_PATH}/components/material.hpp
         ${HEADER_PATH}/render_ctx.hpp
-        ${HEADER_PATH}/texture/tex2d.hpp
         ${HEADER_PATH}/module.hpp
         ${HEADER_PATH}/display.hpp
         ${HEADER_PATH}/render_fwd.hpp
-        ${HEADER_PATH}/render_target.hpp
-        ${HEADER_PATH}/framebuffer.hpp)
+        )
 
 set(SOURCE_FILES
         src/components/mesh_renderer.cpp
@@ -44,9 +42,8 @@ set(SOURCE_FILES
         src/components/lights/directional_light.cpp
         src/components/lights/point_light.cpp
         src/components/camera.cpp
-        src/texture/tex2d.cpp
         src/display.cpp
-        src/framebuffer.cpp)
+        )
 
 add_library(malt_render SHARED ${SOURCE_FILES} ${HEADER_FILES})
 malt_def_module(malt_render)
