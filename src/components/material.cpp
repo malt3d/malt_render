@@ -7,6 +7,8 @@
 #include <fstream>
 #include <malt_render/messages.hpp>
 #include <rtk/gl/shader.hpp>
+#include <malt_asset/text_asset.hpp>
+#include <malt_asset/assets.hpp>
 
 MALT_IMPLEMENT_COMP(material)
 
@@ -50,14 +52,11 @@ void material::set_phong_exponent(float phong_exponent)
 
 void material::Handle(malt::init)
 {
-    auto read_text_file = [](const std::string& path) -> std::string
-    {
-        std::ifstream f(path);
-        return {std::istreambuf_iterator<char>(f), std::istreambuf_iterator<char>()};
-    };
+    auto vert_src = malt::asset::load<malt::text_asset>("malt_shaders/phong.vert");
+    auto frag_src = malt::asset::load<malt::text_asset>("malt_shaders/phong.frag");
 
-    rtk::gl::vertex_shader phong_vertex { read_text_file("/home/fatih/malt/malt_shaders/phong.vert").c_str() };
-    rtk::gl::fragment_shader phong_fragment { read_text_file("/home/fatih/malt/malt_shaders/phong.frag").c_str() };
+    rtk::gl::vertex_shader phong_vertex { vert_src.c_str() };
+    rtk::gl::fragment_shader phong_fragment { frag_src.c_str() };
 
     m_program.attach(phong_vertex);
     m_program.attach(phong_fragment);

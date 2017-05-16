@@ -31,6 +31,7 @@ set(HEADER_FILES
         ${HEADER_PATH}/module.hpp
         ${HEADER_PATH}/display.hpp
         ${HEADER_PATH}/render_fwd.hpp
+        ${HEADER_PATH}/shader_loader.hpp
         )
 
 set(SOURCE_FILES
@@ -43,7 +44,7 @@ set(SOURCE_FILES
         src/components/lights/point_light.cpp
         src/components/camera.cpp
         src/display.cpp
-        )
+        src/shader_loader.cpp)
 
 add_library(malt_render SHARED ${SOURCE_FILES} ${HEADER_FILES})
 malt_def_module(malt_render)
@@ -57,5 +58,6 @@ target_compile_definitions(malt_render PUBLIC GLM_ENABLE_EXPERIMENTAL=1)
 
 malt_add_module(malt_render malt_core)
 malt_add_module(malt_render malt_basic)
+malt_add_module(malt_render malt_asset)
 
 malt_install(malt_render ${HEADER_PATH})
