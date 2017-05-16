@@ -52,13 +52,5 @@ void material::set_phong_exponent(float phong_exponent)
 
 void material::Handle(malt::init)
 {
-    auto vert_src = malt::asset::load<malt::text_asset>("malt_shaders/phong.vert");
-    auto frag_src = malt::asset::load<malt::text_asset>("malt_shaders/phong.frag");
-
-    rtk::gl::vertex_shader phong_vertex { vert_src.c_str() };
-    rtk::gl::fragment_shader phong_fragment { frag_src.c_str() };
-
-    m_program.attach(phong_vertex);
-    m_program.attach(phong_fragment);
-    m_program.link();
+    m_program = malt::asset::load<rtk::gl::program>("malt_shaders/phong.s.yml");
 }

@@ -10,6 +10,7 @@
 #include <rtk/asset/mesh_import.hpp>
 #include <rtk/mesh_ops.hpp>
 #include <rtk/texture/tex2d.hpp>
+#include <malt_asset/assets.hpp>
 
 void render_test::Handle(malt::start)
 {
@@ -20,12 +21,8 @@ void render_test::Handle(malt::start)
     phong_material->set_phong_exponent(32.0f);
 
     auto mesh_rend = get_entity().add_component<mesh_renderer>();
-    auto meshes = rtk::assets::load_meshes("/home/fatih/rtk/assets/teapot.obj");
 
-    auto m = new rtk::gl::mesh(meshes[0]);
-    m->add_vertex_data<glm::vec3>(1, rtk::geometry::generate_normals(meshes[0]));
-
-    rtk::geometry::primitive::cube();
+    auto m = new rtk::gl::mesh(malt::asset::load<rtk::gl::mesh>("models/teapot.obj"));
 
     mesh_rend->set_mesh(*m);
 

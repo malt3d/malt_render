@@ -42,7 +42,7 @@ void render_mod::init()
 {
     using namespace rtk::literals;
     w = new window({800_px, 600_px}, "malt");
-    w->lock_cursor(true);
+    //w->lock_cursor(true);
     inst = this;
 }
 
