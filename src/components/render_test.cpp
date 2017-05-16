@@ -9,7 +9,7 @@
 #include <malt_render/components/mesh_renderer.hpp>
 #include <rtk/asset/mesh_import.hpp>
 #include <rtk/mesh_ops.hpp>
-#include <malt_render/texture/tex2d.hpp>
+#include <rtk/texture/tex2d.hpp>
 
 void render_test::Handle(malt::start)
 {
@@ -29,8 +29,8 @@ void render_test::Handle(malt::start)
 
     mesh_rend->set_mesh(*m);
 
-    auto texture = malt::graphics::load_texture("/home/fatih/Desktop/bjarne.jpg");
-    auto gl_texture = new malt::gl::texture2d(texture);
+    auto texture = rtk::graphics::load_texture("/home/fatih/Desktop/bjarne.jpg");
+    auto gl_texture = new rtk::gl::texture2d(texture);
 
     gl_texture->activate(1);
     phong_material->get_program().set_variable("tex", 1);

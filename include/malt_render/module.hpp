@@ -8,7 +8,7 @@
 
 struct render_module_def
 {
-    using components = malt::mp::list<class mesh_renderer, class material, class render_test,
+    using components = malt::meta::list<class mesh_renderer, class material, class render_test,
             class directional_light, class point_light, class camera>;
 };
 

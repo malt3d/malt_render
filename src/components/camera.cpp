@@ -8,8 +8,9 @@
 #include <malt_render/components/camera.hpp>
 #include <malt_render/display.hpp>
 #include <rtk/utility.hpp>
-#include <malt_render/framebuffer.hpp>
-#include <malt_render/texture/tex2d.hpp>
+#include <rtk/framebuffer.hpp>
+#include <rtk/texture/tex2d.hpp>
+using namespace rtk;
 
 void camera::Handle(malt::update)
 {
@@ -91,7 +92,7 @@ void camera::set_viewport(const glm::vec2& pos, const glm::vec2& sz)
     m_viewport_size = sz;
 }
 
-void camera::render_to_texture(const malt::gl::framebuffer& fb)
+void camera::render_to_texture(const gl::framebuffer& fb)
 {
     m_fb = &fb;
 }
