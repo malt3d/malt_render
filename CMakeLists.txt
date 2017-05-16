@@ -32,7 +32,6 @@ set(HEADER_FILES
         ${HEADER_PATH}/module.hpp
         ${HEADER_PATH}/display.hpp
         ${HEADER_PATH}/render_fwd.hpp
-        ${HEADER_PATH}/render_target.hpp
         ${HEADER_PATH}/framebuffer.hpp)
 
 set(SOURCE_FILES
