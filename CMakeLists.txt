@@ -34,6 +34,8 @@ set(HEADER_FILES
         ${HEADER_PATH}/display.hpp
         ${HEADER_PATH}/render_fwd.hpp
         ${HEADER_PATH}/shader_loader.hpp
+        ${HEADER_PATH}/texture_loader.hpp
+        ${HEADER_PATH}/mesh_loader.hpp
         )
 
 set(SOURCE_FILES
@@ -46,7 +48,10 @@ set(SOURCE_FILES
         src/components/lights/point_light.cpp
         src/components/camera.cpp
         src/display.cpp
-        src/shader_loader.cpp src/mesh_loader.cpp include/malt_render/mesh_loader.hpp)
+        src/shader_loader.cpp
+        src/mesh_loader.cpp
+        src/texture_loader.cpp
+        )
 
 add_library(malt_render SHARED ${SOURCE_FILES} ${HEADER_FILES})
 malt_def_module(malt_render)
