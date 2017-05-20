@@ -26,7 +26,7 @@ void render_test::Handle(malt::start)
 
     mesh_rend->set_mesh(*m);
 
-    auto texture = rtk::graphics::load_texture("/home/fatih/Desktop/bjarne.jpg");
+    auto texture = malt::asset::load<rtk::graphics::texture2d>("/home/fatih/Desktop/bjarne.jpg");
     auto gl_texture = new rtk::gl::texture2d(texture);
 
     gl_texture->activate(1);
