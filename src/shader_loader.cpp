@@ -21,15 +21,16 @@ namespace malt {
     rtk::gl::program shader_loader::load(meta::type<rtk::gl::program>, asset::asset_file& f)
     {
         boost::filesystem::path fsp(f.get_path());
+        std::cout << fsp << '\n';
 
         Node root = YAML::Load(f.get_stream());
-        //std::cerr << "Loading shader: " << root["shader"]["name"].as<std::string>() << '\n';
+        std::cerr << "Loading shader: " << root["shader"]["name"].as<std::string>() << '\n';
 
         auto vs_file = root["shader"]["vertex_shader"].as<std::string>();
         auto fs_file = root["shader"]["fragment_shader"].as<std::string>();
 
-        auto vert_src = malt::asset::load<malt::text_asset>((fsp.parent_path() / vs_file).c_str());
-        auto frag_src = malt::asset::load<malt::text_asset>((fsp.parent_path() / fs_file).c_str());
+        auto vert_src = malt::asset::load<malt::text_asset>((fsp.parent_path() / vs_file).string());
+        auto frag_src = malt::asset::load<malt::text_asset>((fsp.parent_path() / fs_file).string());
 
         rtk::gl::vertex_shader v_shader { vert_src.c_str() };
         rtk::gl::fragment_shader f_shader { frag_src.c_str() };

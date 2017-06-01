@@ -9,6 +9,7 @@ message(STATUS "${CMAKE_PREFIX_PATH}")
 
 find_package(rtk REQUIRED)
 find_package(SOIL REQUIRED)
+find_package(GLM REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem)
 
@@ -59,6 +60,7 @@ malt_def_module(malt_render)
 target_link_libraries(malt_render PUBLIC rtk)
 
 target_include_directories(malt_render PUBLIC "${SOIL_INCLUDE_DIR}")
+target_include_directories(malt_render PUBLIC ${GLM_INCLUDE_DIR})
 target_link_libraries(malt_render PUBLIC "${SOIL_LIBRARY}")
 target_link_libraries(malt_render PUBLIC "${Boost_LIBRARIES}")
 
