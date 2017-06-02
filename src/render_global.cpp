@@ -66,36 +66,37 @@ void render_mod::update()
     point_light_data pl[8];
     int pl_len = 0;
 
-    malt::for_each_component<point_light>([&](point_light* p_pl)
+    for (auto& plight : malt::get_components<point_light>())
     {
-        pl[pl_len].position = p_pl->get_component<malt::transform>()->get_pos();
-        pl[pl_len].intensity = p_pl->get_intensity();
+        pl[pl_len].position = plight.get_component<malt::transform>()->get_pos();
+        pl[pl_len].intensity = plight.get_intensity();
         ++pl_len;
-    });
+    }
 
-    malt::for_each_component<directional_light>([&](directional_light* p_dl)
+    for (directional_light& dlight : malt::get_components<directional_light>())
     {
-        dl.direction = p_dl->get_light_direction();
-        dl.intensity = p_dl->get_intensity();
-    });
+        dl.direction = dlight.get_light_direction();
+        dl.intensity = dlight.get_intensity();
+    }
 
-    malt::for_each_component<camera>([&](camera* cam)
+    for(camera& cam : malt::get_components<camera>())
     {
         render_ctx ctx;
-        ctx.vp = cam->get_vp_matrix();
-        ctx.cam_position = cam->get_component<malt::transform>()->get_pos();
+        ctx.vp = cam.get_vp_matrix();
+        ctx.cam_position = cam.get_component<malt::transform>()->get_pos();
         ctx.ambient_light = ambient;
         ctx.point_light_size = pl_len;
         ctx.dir_light = dl;
         std::copy(std::begin(pl), std::end(pl), std::begin(ctx.point_lights));
 
         malt::display d(w);
-        cam->set_display(&d);
-        cam->activate();
+        cam.set_display(&d);
+        cam.activate();
 
         malt::broadcast(render{}, ctx);
 
         gl::reset_framebuffer();
-    });
+    }
+
     w->end_draw();
 }

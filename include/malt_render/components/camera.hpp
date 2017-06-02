@@ -18,16 +18,18 @@ private:
     glm::mat4 m_view_matrix;
     glm::mat4 m_projection_matrix;
     glm::mat4 m_vp_matrix;
+    bool m_projection_dirty = true;
+
     float m_fov = 1.0471975512f; // 60 degrees
     float m_aspect_ratio = 1.333333f; //800 over 600
     float m_near_plane = 0.1f;
     float m_far_plane = 100.0f;
-    bool m_update_projection_matrix = true;
 
     glm::vec2 m_viewport_pos = {0.f, 0.f};
     glm::vec2 m_viewport_size = {1.f, 1.f};
 
     malt::display* display;
+
     const rtk::gl::framebuffer* m_fb;
 
 public:
@@ -53,6 +55,18 @@ public:
     void render_to_texture(const rtk::gl::framebuffer& fb);
 
     void activate() const;
+
+    template <class Ar>
+    void serialize(Ar& ar)
+    {
+        ar(
+            m_fov,
+            m_aspect_ratio,
+            m_near_plane,
+            m_far_plane,
+            m_viewport_pos,
+            m_viewport_size);
+    }
 };
 
 #endif //MALT_CAMERA_HPP

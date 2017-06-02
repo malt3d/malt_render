@@ -9,7 +9,7 @@ message(STATUS "${CMAKE_PREFIX_PATH}")
 
 find_package(rtk REQUIRED)
 find_package(SOIL REQUIRED)
-find_package(GLM REQUIRED)
+find_package(glm REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem)
 
