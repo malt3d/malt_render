@@ -54,7 +54,7 @@ set(SOURCE_FILES
         src/texture_loader.cpp
         )
 
-add_library(malt_render SHARED ${SOURCE_FILES} ${HEADER_FILES})
+add_library(malt_render ${MALT_LIB_TYPE} ${SOURCE_FILES} ${HEADER_FILES})
 malt_def_module(malt_render)
 
 target_link_libraries(malt_render PUBLIC rtk)
