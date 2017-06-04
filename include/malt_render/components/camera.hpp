@@ -67,6 +67,14 @@ public:
             m_viewport_pos,
             m_viewport_size);
     }
+
+    REFLECT(camera,
+            MEM(m_fov),
+            MEM(m_aspect_ratio),
+            MEM(m_near_plane),
+            MEM(m_far_plane),
+            MEM(m_viewport_pos),
+            MEM(m_viewport_size))
 };
 
 #endif //MALT_CAMERA_HPP
