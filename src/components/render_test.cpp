@@ -23,7 +23,6 @@ void render_test::Handle(malt::start)
     auto mesh_rend = get_entity().add_component<mesh_renderer>();
 
     auto m = new rtk::gl::mesh(malt::asset::load<rtk::gl::mesh>("models/teapot.obj"));
-
     mesh_rend->set_mesh(*m);
 
     auto texture = malt::asset::load<rtk::graphics::texture2d>("test.jpg");

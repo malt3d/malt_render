@@ -6,17 +6,19 @@
 #define MALT_MESH_RENDERER_HPP
 
 #include <malt_render/messages.hpp>
+#include <malt_render/components/material.hpp>
 #include <malt/component.hpp>
 #include <rtk/gl/mesh.hpp>
 #include <malt_render/render_ctx.hpp>
 
 class mesh_renderer : public malt::component
 {
-private:
     rtk::gl::mesh* m_mesh;
-
 public:
     void set_mesh(rtk::gl::mesh& m);
+    rtk::gl::mesh* get_mesh() { return m_mesh; }
+    material* get_material() { return get_component<material>(); }
+
     void Handle(render, const render_ctx&);
 };
 
