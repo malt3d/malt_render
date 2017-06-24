@@ -28,6 +28,12 @@ public:
     void set_diffuse(const glm::vec3& diffuse);
     void set_specular(const glm::vec3& specular);
     void set_phong_exponent(float phong_exponent);
+
+    REFLECT(material,
+            MEM(m_ambient),
+            MEM(m_diffuse),
+            MEM(m_specular),
+            MEM(m_phong_exponent));
 };
 
 #endif //MALT_MATERIAL_HPP

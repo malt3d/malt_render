@@ -18,6 +18,8 @@ private:
 public:
     void set_mesh(rtk::gl::mesh& m);
     void Handle(render, const render_ctx&);
+
+    REFLECT(mesh_renderer, NOMEM);
 };
 
 #endif //MALT_MESH_RENDERER_HPP
