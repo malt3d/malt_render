@@ -12,4 +12,7 @@ class point_light : public malt::component
     glm::vec3 m_intensity;
 public:
     glm::vec3 get_intensity();
+
+    REFLECT(point_light,
+            MEM(m_intensity));
 };

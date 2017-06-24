@@ -15,6 +15,7 @@ class render_test : public malt::component
 {
 public:
     void Handle(malt::start);
+    REFLECT(render_test, NOMEM);
 };
 
 

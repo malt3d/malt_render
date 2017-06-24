@@ -16,6 +16,9 @@ public:
     void set_intensity(const glm::vec3&);
     glm::vec3 get_intensity();
     glm::vec3 get_light_direction();
+
+    REFLECT(directional_light,
+            MEM(m_intensity));
 };
 
 #endif //MALT_DIRECTIONAL_LIGHT_HPP

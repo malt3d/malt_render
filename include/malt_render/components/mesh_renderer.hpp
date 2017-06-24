@@ -20,6 +20,8 @@ public:
     material* get_material() { return get_component<material>(); }
 
     void Handle(render, const render_ctx&);
+
+    REFLECT(mesh_renderer, NOMEM);
 };
 
 #endif //MALT_MESH_RENDERER_HPP
