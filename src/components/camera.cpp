@@ -10,6 +10,7 @@
 #include <rtk/utility.hpp>
 #include <rtk/framebuffer.hpp>
 #include <rtk/texture/tex2d.hpp>
+
 using namespace rtk;
 
 void camera::Handle(malt::update)

@@ -56,18 +56,6 @@ public:
 
     void activate() const;
 
-    template <class Ar>
-    void serialize(Ar& ar)
-    {
-        ar(
-            m_fov,
-            m_aspect_ratio,
-            m_near_plane,
-            m_far_plane,
-            m_viewport_pos,
-            m_viewport_size);
-    }
-
     REFLECT(camera,
             MEM(m_fov),
             MEM(m_aspect_ratio),
