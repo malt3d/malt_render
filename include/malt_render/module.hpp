@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <malt/list.hpp>
+#include <malt/meta.hpp>
 
 struct render_module_def
 {

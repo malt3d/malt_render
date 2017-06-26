@@ -13,6 +13,8 @@
 #include <malt_render/display.hpp>
 #include <malt_basic/input.hpp>
 #include <rtk/framebuffer.hpp>
+#include <malt/strided_iterator.hpp>
+
 using namespace rtk;
 
 static render_mod* inst;

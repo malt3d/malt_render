@@ -5,7 +5,7 @@
 #include <malt_render/components/render_test.hpp>
 #include <malt_render/components/material.hpp>
 #include <rtk/gl/mesh.hpp>
-#include <malt/component_mgr_impl.hpp>
+#include <malt/detail/component_mgr_impl.hpp>
 #include <malt_render/components/mesh_renderer.hpp>
 #include <rtk/asset/mesh_import.hpp>
 #include <rtk/mesh_ops.hpp>

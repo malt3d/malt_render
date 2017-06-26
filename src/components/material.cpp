@@ -3,7 +3,7 @@
 //
 
 #include <malt_render/components/material.hpp>
-#include <malt/component_mgr_impl.hpp>
+#include <malt/detail/component_mgr_impl.hpp>
 #include <fstream>
 #include <malt_render/messages.hpp>
 #include <rtk/gl/shader.hpp>

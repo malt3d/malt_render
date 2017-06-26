@@ -18,5 +18,4 @@ public:
     REFLECT(render_test, NOMEM);
 };
 
-
 #endif //MALT_RENDER_TEST_H
