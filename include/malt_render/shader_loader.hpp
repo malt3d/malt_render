@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#include <malt_asset/asset_loader.hpp>
+#include <malt_asset/asset_file.hpp>
 #include <malt/meta.hpp>
 #include <rtk/rtk_fwd.hpp>
 

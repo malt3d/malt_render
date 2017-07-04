@@ -44,7 +44,7 @@ namespace malt
     rtk::gl::texture2d texture_loader::load(meta::type<rtk::gl::texture2d>, asset::asset_file& f)
     {
         auto res = asset::load<rtk::graphics::texture2d>(f.get_path());
-        return {res};
+        return {*res};
     }
 
 

@@ -37,8 +37,8 @@ bool mesh_loader::check(meta::type<rtk::gl::mesh>, const asset::asset_file&) con
 rtk::gl::mesh mesh_loader::load(meta::type<rtk::gl::mesh>, asset::asset_file& f)
 {
     auto geo_mesh = malt::asset::load<rtk::geometry::mesh>(f.get_path());
-    auto m = create(geo_mesh);
-    m.add_vertex_data<glm::vec3>(1, rtk::geometry::generate_normals(geo_mesh));
+    auto m = create(*geo_mesh);
+    m.add_vertex_data<glm::vec3>(1, rtk::geometry::generate_normals(*geo_mesh));
     return m;
 }
 }

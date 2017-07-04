@@ -11,17 +11,21 @@
 #include <rtk/gl/mesh.hpp>
 #include <malt_render/render_ctx.hpp>
 
-class mesh_renderer : public malt::component
+namespace malt
 {
-    rtk::gl::mesh* m_mesh;
-public:
-    void set_mesh(rtk::gl::mesh& m);
-    rtk::gl::mesh* get_mesh() { return m_mesh; }
-    material* get_material() { return get_component<material>(); }
+    class mesh_renderer : public malt::component
+    {
+        rtk::gl::mesh* m_mesh;
+    public:
+        void set_mesh(rtk::gl::mesh& m);
+        rtk::gl::mesh* get_mesh() { return m_mesh; }
+        material* get_material() { return get_component<material>(); }
 
-    void Handle(render, const render_ctx&);
+        void Handle(render, const render_ctx&);
 
-    REFLECT(mesh_renderer, NOMEM);
-};
+        REFLECT(malt::mesh_renderer, NOMEM);
+    };
+}
+
 
 #endif //MALT_MESH_RENDERER_HPP

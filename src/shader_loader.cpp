@@ -32,8 +32,8 @@ namespace malt {
         auto vert_src = malt::asset::load<malt::text_asset>((fsp.parent_path() / vs_file).string());
         auto frag_src = malt::asset::load<malt::text_asset>((fsp.parent_path() / fs_file).string());
 
-        rtk::gl::vertex_shader v_shader { vert_src.c_str() };
-        rtk::gl::fragment_shader f_shader { frag_src.c_str() };
+        rtk::gl::vertex_shader v_shader { vert_src->c_str() };
+        rtk::gl::fragment_shader f_shader { frag_src->c_str() };
 
         rtk::gl::program program;
         program.attach(v_shader);
