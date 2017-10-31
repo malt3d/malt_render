@@ -19,7 +19,7 @@ void camera::Handle(malt::update)
     auto right = camera_transform->get_right();
     auto up = camera_transform->get_up();
     auto forward = camera_transform->get_forward();
-    auto& position = camera_transform->get_pos();
+    auto position = camera_transform->get_pos();
 
     m_view_matrix = glm::lookAt(position, position + forward, up);
 
