@@ -6,5 +6,6 @@
 #define MALT_MESSAGES_HPP
 
 struct render{};
+struct shadow{};
 
 #endif //MALT_MESSAGES_HPP

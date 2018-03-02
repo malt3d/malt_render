@@ -22,6 +22,7 @@ namespace malt
         material* get_material() { return get_component<material>(); }
 
         void Handle(render, const render_ctx&);
+        void Handle(shadow, const shadow_ctx&);
 
         REFLECT(malt::mesh_renderer, NOMEM);
     };

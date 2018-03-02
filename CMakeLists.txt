@@ -37,6 +37,7 @@ set(HEADER_FILES
         ${HEADER_PATH}/shader_loader.hpp
         ${HEADER_PATH}/texture_loader.hpp
         ${HEADER_PATH}/mesh_loader.hpp
+        ${HEADER_PATH}/components/cube_test.hpp
         )
 
 set(SOURCE_FILES
@@ -51,6 +52,7 @@ set(SOURCE_FILES
         src/shader_loader.cpp
         src/mesh_loader.cpp
         src/texture_loader.cpp
+        src/components/cube_test.cpp
         )
 
 add_library(malt_render ${MALT_LIB_TYPE} ${SOURCE_FILES} ${HEADER_FILES})

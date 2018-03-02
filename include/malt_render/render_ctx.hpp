@@ -17,6 +17,7 @@ struct point_light_data
 {
     glm::vec3 intensity;
     glm::vec3 position;
+    glm::mat4 transform;
 };
 
 struct render_ctx
@@ -27,6 +28,12 @@ struct render_ctx
     directional_light_data dir_light;
     point_light_data point_lights[8];
     int point_light_size;
+    rtk::gl::texture2d* shadow;
 };
 
+struct shadow_ctx
+{
+    glm::mat4 depth_mvp;
+    rtk::gl::program* mat;
+};
 #endif //MALT_RENDER_CTX_HPP

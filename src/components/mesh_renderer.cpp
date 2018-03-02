@@ -7,6 +7,7 @@
 #include <rtk/gl/mesh.hpp>
 #include <malt/detail/component_mgr_impl.hpp>
 #include <malt_basic/components/transform.hpp>
+#include <rtk/texture/tex2d.hpp>
 
 namespace malt
 {
@@ -20,7 +21,23 @@ namespace malt
         prog.set_variable("ambient_light", ctx.ambient_light);
         prog.set_variable("directional_light.intensity", ctx.dir_light.intensity);
         prog.set_variable("directional_light.direction", ctx.dir_light.direction);
-        prog.set_variable("number_of_point_lights", 0);
+        prog.set_variable("number_of_point_lights", ctx.point_light_size);
+        prog.set_variable("shadowTex", 0);
+        prog.set_variable("lightMat", ctx.point_lights[0].transform);
+        ctx.shadow->activate(0);
+        for (int i = 0; i < ctx.point_light_size; ++i)
+        {
+            prog.set_variable("point_light[" + std::to_string(i) + "].intensity", ctx.point_lights[i].intensity);
+            prog.set_variable("point_light[" + std::to_string(i) + "].position", ctx.point_lights[i].position);
+        }
+        m_mesh->draw(prog);
+    }
+
+    void mesh_renderer::Handle(shadow, const shadow_ctx& ctx)
+    {
+        auto& prog = *ctx.mat;
+        prog.set_variable("model", get_component<malt::transform>()->get_world_mat4());
+        prog.set_variable("vp", ctx.depth_mvp);
         m_mesh->draw(prog);
     }
 
