@@ -15,7 +15,7 @@ namespace malt
 struct render_module_def
 {
     using components = malt::meta::list<malt::mesh_renderer, malt::material, class render_test,
-            class directional_light, class point_light, class camera>;
+            class directional_light, class point_light, class camera, class cube_test>;
 
     using globals = malt::meta::list<class render_global>;
 
