@@ -41,7 +41,6 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
         src/components/mesh_renderer.cpp
-        src/module.cpp
         src/render_global.cpp
         src/components/material.cpp
         src/components/render_test.cpp
@@ -68,8 +67,10 @@ target_link_libraries(malt_render PUBLIC yaml-cpp)
 
 target_compile_definitions(malt_render PUBLIC GLM_ENABLE_EXPERIMENTAL=1)
 
-malt_add_module(malt_render malt_core)
-malt_add_module(malt_render malt_basic)
-malt_add_module(malt_render malt_asset)
+malt_dependency(malt_render malt_core)
+malt_dependency(malt_render malt_basic)
+malt_dependency(malt_render malt_asset)
 
-malt_install(malt_render ${HEADER_PATH})
+set(SHADERS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../malt_shaders")
+
+malt_install(malt_render ${HEADER_PATH} ${SHADERS_PATH})
